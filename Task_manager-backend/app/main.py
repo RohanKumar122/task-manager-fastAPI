@@ -3,8 +3,17 @@ from fastapi.security import OAuth2PasswordRequestForm
 from app.routers import tasks
 from app.auth import create_access_token, authenticate_user  
 from app.models import User 
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"], 
+    allow_credentials=True,
+    allow_methods=["*"],  
+    allow_headers=["*"],  
+)
 
 @app.post("/token")
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
