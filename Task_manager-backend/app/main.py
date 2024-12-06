@@ -5,6 +5,7 @@ from app.auth import create_access_token, authenticate_user
 from app.models import User
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
+import os
 
 app = FastAPI()
 
@@ -15,6 +16,14 @@ app.add_middleware(
     allow_methods=["*"], 
     allow_headers=["*"], 
 )
+
+# port from .env
+PORT = os.getenv("PORT")
+
+
+@app.get("/")
+async def root():
+    return {"message": "server is UP!!"}
 
 # Token route for login
 @app.post("/token")
@@ -30,5 +39,5 @@ app.include_router(tasks.router)
 
 if __name__ == "__main__":
     import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=PORT or 8000 , reload=True)
 
