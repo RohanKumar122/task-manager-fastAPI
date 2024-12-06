@@ -2,6 +2,6 @@
 fastapi
 pymongo
 python-dotenv
-jose
+jwt
 pydantic
 uvicorn
