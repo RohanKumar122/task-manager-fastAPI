@@ -6,8 +6,8 @@ const TaskList = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  const backendapi = 'http://localhost:8000';
-  // const backendapi = '0.0.0.0:8000';
+  // const backendapi = 'http://localhost:8000';
+  const backendapi = 'https://backend-task-manager-9vah.onrender.com';
 
   useEffect(() => {
     // Fetch tasks from backend
@@ -58,10 +58,10 @@ const TaskList = ({ token }) => {
   };
 
   const handleUpdateStatus = async (id, currentStatus) => {
-    const newStatus = currentStatus === 'To Do' ? 'In Progress' : 'To Do'; // Toggle between 'To Do' and 'In Progress'
+    const newStatus = currentStatus === 'To Do' ? 'In Progress' : 'To Do';
   
     try {
-      const response = await fetch(`http://localhost:8000/tasks/${id}`, {
+      const response = await fetch(`${backendapi}/tasks/${id}`, {
         method: 'PUT',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -104,7 +104,7 @@ const TaskList = ({ token }) => {
             <li key={task.id} className="bg-white p-4 shadow-md rounded-md"> {/* Use task.id instead of task._id */}
               <h3 className="text-lg font-semibold">{task.title}</h3>
               <p>{task.description}</p>
-              <p className="text-gray-500">Created At: {new Date(task.createdAt).toLocaleString()}</p>
+              <p className="text-gray-500">Created At: {new Date(task.created_at).toLocaleString()}</p>
               <p>Status: {task.status}</p>
 
               <div className="mt-2">

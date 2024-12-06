@@ -28,7 +28,7 @@ const App = () => {
 
   return (
     <Router>
-      <div className="min-h-screen bg-gray-100">
+      <div className="min-h-screen bg-gray-100  ">
         <header className="bg-blue-500 text-white p-4">
           <h1 className="text-xl">Task Manager</h1>
         </header>
