@@ -1,9 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const TaskForm = ({ token }) => {
-
-
-  const backendapi = process.env.REACT_APP_BACKEND_API
+  const backendapi = process.env.REACT_APP_BACKEND_API;
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -11,6 +10,8 @@ const TaskForm = ({ token }) => {
   const [dueDate, setDueDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  const navigate = useNavigate(); // Initialize the navigate hook
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -29,19 +30,19 @@ const TaskForm = ({ token }) => {
       const response = await fetch(`${backendapi}/tasks`, {
         method: 'POST',
         headers: {
-          'Authorization': `Bearer ${token}`,
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(newTask),
       });
 
       if (response.ok) {
-        const createdTask = await response.json();
-        alert('Task created successfully');
+        // alert('Task created successfully');
         setTitle('');
         setDescription('');
         setStatus('To Do');
         setDueDate('');
+        navigate('/'); // Redirect to the `/` route
       } else {
         throw new Error('Failed to create task');
       }
@@ -113,8 +114,8 @@ const TaskForm = ({ token }) => {
             required
           />
         </div>
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           className={`w-full py-2 px-4 rounded-md ${loading ? 'bg-gray-400' : 'bg-blue-500 text-white'}`}
           disabled={loading}
         >
