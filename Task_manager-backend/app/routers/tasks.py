@@ -16,7 +16,7 @@ def validate_object_id(id: str):
 @router.get("/tasks")
 async def get_tasks(current_user: str = Depends(get_current_user)):
     try:
-        tasks = list(tasks_collection.find({"user": current_user}))  # Fetch tasks for the current user
+        tasks = list(tasks_collection.find({"user": current_user})) 
         return tasks
     except Exception as e:
         raise HTTPException(status_code=500, detail="Error fetching tasks")

@@ -4,3 +4,5 @@
  pymongo
  pyjwt
  jwt
+ python-dotenv
+ 
