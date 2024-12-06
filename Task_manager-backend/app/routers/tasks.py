@@ -1,10 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends
-from app.auth import get_current_user 
 from app.database import db,tasks_collection
 from app.schemas import TaskCreate, TaskUpdate, TaskResponse
 from bson import ObjectId
 from datetime import datetime
 from typing import Optional
+from app.auth import get_current_user
+
 
 router = APIRouter(prefix="/tasks", tags=["Tasks"])
 

@@ -14,7 +14,7 @@ class User(BaseModel):
 
 
 class UserInDB(User):
-    id: str  # Store as string for serialization
+    id: str 
 
 
 class TaskStatus(str, Enum):
@@ -35,15 +35,14 @@ class TaskCreate(TaskBase):
 
 
 class Task(TaskBase):
-    id: str = Field(..., alias="_id")  # MongoDB _id field mapped to 'id'
+    id: str = Field(..., alias="_id")  
 
     @validator('id', pre=True)
     def convert_objectid_to_str(cls, v):
-        # Convert ObjectId to string if it's an ObjectId instance
         if isinstance(v, ObjectId):
             return str(v)
         return v
 
     class Config:
-        from_attributes = True  # For compatibility with Pydantic v2
+        from_attributes = True  
 

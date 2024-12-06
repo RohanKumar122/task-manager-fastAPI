@@ -1,8 +1,7 @@
- python-multipart
+python-multipart
 fastapi
 pymongo
 python-dotenv
-jwt
 pydantic
 uvicorn
 PyJWT==2.3.0

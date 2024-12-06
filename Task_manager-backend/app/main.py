@@ -1,20 +1,19 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from app.routers import tasks
-from app.auth import create_access_token, authenticate_user  # Updated import
+from app.auth import create_access_token, authenticate_user 
 from app.models import User
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 
 app = FastAPI()
 
-# CORS middleware to allow cross-origin requests
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allow all origins; adjust if needed for production
+    allow_origins=["*"], 
     allow_credentials=True,
-    allow_methods=["*"],  # Allow all HTTP methods
-    allow_headers=["*"],  # Allow all headers
+    allow_methods=["*"], 
+    allow_headers=["*"], 
 )
 
 # Token route for login
