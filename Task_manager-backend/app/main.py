@@ -4,6 +4,7 @@ from app.routers import tasks
 from app.auth import create_access_token, authenticate_user  # Updated import
 from app.models import User
 from fastapi.middleware.cors import CORSMiddleware
+import uvicorn
 
 app = FastAPI()
 
@@ -26,5 +27,9 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     access_token = create_access_token(data={"sub": form_data.username})
     return {"access_token": access_token, "token_type": "bearer"}
 
-# Including the tasks router
 app.include_router(tasks.router)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run("app.main:app", host="0.0.0.0", port=8000, reload=True)
+
