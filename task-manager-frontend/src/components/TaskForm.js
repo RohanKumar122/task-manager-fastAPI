@@ -42,7 +42,7 @@ const TaskForm = ({ token }) => {
         setDescription('');
         setStatus('To Do');
         setDueDate('');
-        navigate('/'); // Redirect to the `/` route
+        navigate('/'); 
       } else {
         throw new Error('Failed to create task');
       }
@@ -108,6 +108,7 @@ const TaskForm = ({ token }) => {
           <input
             id="dueDate"
             type="date"
+            placeholder='yyyy-mm-dd'
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
