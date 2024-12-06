@@ -1,25 +1,28 @@
 from fastapi import FastAPI, Depends, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from app.routers import tasks
-from app.auth import create_access_token, authenticate_user 
+from app.auth import create_access_token, authenticate_user
 from app.models import User
 from fastapi.middleware.cors import CORSMiddleware
 import uvicorn
 import os
+from dotenv import load_dotenv  # Import dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"], 
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"], 
-    allow_headers=["*"], 
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
-# port from .env
-PORT = os.getenv("PORT")
-
+# Get the port from the .env file, default to 8800 if not set
+PORT = int(os.getenv("PORT", 8800))
 
 @app.get("/")
 async def root():
@@ -38,6 +41,5 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 app.include_router(tasks.router)
 
 if __name__ == "__main__":
-    import uvicorn
-    uvicorn.run("app.main:app", host="0.0.0.0", port=PORT or 8000 , reload=True)
-
+    # Run the app using uvicorn with the port from .env
+    uvicorn.run("app.main:app", host="0.0.0.0", port=PORT, reload=True)
