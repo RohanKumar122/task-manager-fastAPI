@@ -42,4 +42,4 @@ app.include_router(tasks.router)
 
 if __name__ == "__main__":
     # Run the app using uvicorn with the port from .env
-    uvicorn.run("app.main:app", host="0.0.0.0", port=PORT, reload=True)
+    uvicorn.run("app.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8800)), reload=True)
