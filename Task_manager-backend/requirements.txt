@@ -1,8 +1,7 @@
  python-multipart
- fastapi 
- uvicorn 
- pymongo
- pyjwt
- jwt
- python-dotenv
- 
+fastapi
+pymongo
+python-dotenv
+jose
+pydantic
+uvicorn
