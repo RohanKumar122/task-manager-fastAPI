@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt  # Using PyJWT
-from jwt import ExpiredSignatureError, InvalidTokenError  # Correct import for exceptions
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError  # Correct import for exceptions
 from datetime import datetime, timedelta
 import os
 from pydantic import BaseModel
@@ -14,7 +14,7 @@ SECRET_KEY = os.getenv("JWT_SECRET_KEY", "default_secret_key")  # Replace with a
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-# OAuth2 scheme
+# OAuth2 scheme for token-based auth
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 # User models
@@ -24,7 +24,7 @@ class User(BaseModel):
 class UserInDB(User):
     hashed_password: str
 
-# Fake user database
+# Fake user database (use a real database in production)
 fake_users_db = {
     "testuser": {
         "username": "test",
@@ -49,25 +49,14 @@ def authenticate_user(username: str, password: str) -> UserInDB | None:
         return user
     return None
 
+# JWT utility function for creating access tokens
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})
     return jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
 
-# Routes
-@app.post("/token")
-async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends()):
-    user = authenticate_user(form_data.username, form_data.password)
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid credentials",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-    access_token = create_access_token(data={"sub": user.username})
-    return {"access_token": access_token, "token_type": "bearer"}
-
+# Function to get the current authenticated user
 def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -78,17 +67,18 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
                 detail="Could not validate credentials",
             )
         return User(username=username)
-    except jwt.ExpiredSignatureError:
+    except ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Token has expired",
         )
-    except jwt.InvalidTokenError:
+    except InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid token",
         )
 
+# Protected route that requires the user to be authenticated
 @app.get("/protected")
 async def protected_route(current_user: User = Depends(get_current_user)):
     return {"message": f"Welcome, {current_user.username}!"}
