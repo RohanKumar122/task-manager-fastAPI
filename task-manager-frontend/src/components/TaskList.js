@@ -6,9 +6,7 @@ const TaskList = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // const backendapi = 'http://localhost:8000';
-  const backendapi = 'https://backend-task-manager-eight.vercel.app';
-
+  const backendapi = process.env.REACT_APP_BACKEND_API;
   useEffect(() => {
     // Fetch tasks from backend
     const fetchTasks = async () => {
