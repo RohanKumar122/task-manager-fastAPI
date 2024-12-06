@@ -5,4 +5,4 @@ python-dotenv
 jwt
 pydantic
 uvicorn
-PyJWT
+PyJWT==2.3.0
