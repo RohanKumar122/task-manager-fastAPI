@@ -87,7 +87,15 @@ const TaskList = ({ token }) => {
   };
 
   if (loading) {
-    return <div>Loading tasks...</div>;
+    return (
+      <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 bg-gray-800 z-50">
+        <div className="flex items-center space-x-2 bg-white p-4 rounded-lg shadow-lg">
+          <div className="w-6 h-6 border-4 border-t-4 border-blue-500 border-solid rounded-full animate-spin"></div>
+          <span className="text-xl text-gray-700">Loading tasks...</span>
+        </div>
+      </div>
+    );
+    
   }
 
   if (error) {
@@ -119,7 +127,19 @@ const TaskList = ({ token }) => {
               {/* Use task.id instead of task._id */}
               <h3 className="text-lg font-bold">{task.title}</h3>
               <p>{task.description}</p>
-              <p>Status: {task.status}</p>
+              <p
+          className={`font-semibold ${
+            task.status === 'In Progress'
+              ? 'text-yellow-500'
+              : task.status === 'To Do'
+              ? 'text-red-500'
+              : task.status === 'Done'
+              ? 'text-green-500'
+              : 'text-gray-500' // Default color if the status is unknown
+          }`}
+        >
+          Status: {task.status}
+        </p>
               <div className="mt-2">
                 <button
                   onClick={() => handleUpdateStatus(task.id, task.status)} // Toggle status by task.id
