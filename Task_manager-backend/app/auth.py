@@ -1,7 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt  # Using PyJWT
-from jwt.exceptions import ExpiredSignatureError, InvalidTokenError  # Correct import for exceptions
+from jwt import ExpiredSignatureError, InvalidTokenError  # Correct import for exceptions
 from datetime import datetime, timedelta
 import os
 from pydantic import BaseModel
@@ -78,12 +78,12 @@ def get_current_user(token: str = Depends(oauth2_scheme)) -> User:
                 detail="Could not validate credentials",
             )
         return User(username=username)
-    except ExpiredSignatureError:
+    except jwt.ExpiredSignatureError:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Token has expired",
         )
-    except InvalidTokenError:
+    except jwt.InvalidTokenError:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Invalid token",
