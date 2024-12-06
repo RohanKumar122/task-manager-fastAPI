@@ -26,7 +26,7 @@ PORT = int(os.getenv("PORT", 8800))
 
 @app.get("/")
 async def root():
-    return {"message": "server is UP!!"}
+    return {"message": "FastAPI app is running!"}
 
 # Token route for login
 @app.post("/token")
@@ -41,5 +41,5 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
 app.include_router(tasks.router)
 
 if __name__ == "__main__":
-    # Run the app using uvicorn with the port from .env
-    uvicorn.run("app.main:app", host="0.0.0.0", port=int(os.getenv("PORT", 8800)), reload=True)
+    port = int(os.getenv("PORT", 8000))  # Render assigns the PORT environment variable
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=True)
