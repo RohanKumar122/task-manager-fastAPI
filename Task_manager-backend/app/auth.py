@@ -1,8 +1,7 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 import jwt  # Using PyJWT
-from jwt import ExpiredSignatureError, InvalidTokenError
-# from jwt.exceptions import ExpiredSignatureError, InvalidTokenError
+from jwt.exceptions import ExpiredSignatureError, InvalidTokenError  # Correct import for exceptions
 from datetime import datetime, timedelta
 import os
 from pydantic import BaseModel
