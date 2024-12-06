@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 
 const TaskForm = ({ token }) => {
+
+  const backendapi = 'http://localhost:8000';
+  // const backendapi = '0.0.0.0:8000';
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('To Do');
@@ -22,7 +26,7 @@ const TaskForm = ({ token }) => {
     setError(null);
 
     try {
-      const response = await fetch('http://localhost:8000/tasks', {
+      const response = await fetch(`${backendapi}/tasks`, {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

@@ -6,11 +6,14 @@ const TaskList = ({ token }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  const backendapi = 'http://localhost:8000';
+  // const backendapi = '0.0.0.0:8000';
+
   useEffect(() => {
     // Fetch tasks from backend
     const fetchTasks = async () => {
       try {
-        const response = await fetch('http://localhost:8000/tasks', {
+        const response = await fetch(`${backendapi}/tasks`, {
           method: 'GET',
           headers: {
             'Authorization': `Bearer ${token}`, // Pass token in Authorization header
@@ -37,7 +40,7 @@ const TaskList = ({ token }) => {
 
   const handleDelete = async (id) => {
     try {
-      const response = await fetch(`http://localhost:8000/tasks/${id}`, {
+      const response = await fetch(`${backendapi}/tasks/${id}`, {
         method: 'DELETE',
         headers: {
           'Authorization': `Bearer ${token}`, // Pass token in Authorization header
