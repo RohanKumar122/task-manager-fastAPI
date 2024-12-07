@@ -33,7 +33,7 @@ const App = () => {
           <h1 className="text-xl">Task Manager</h1>
         </header>
 
-        <main className="p-4">
+        <main className="p-4 ">
           <Routes>
             <Route path="/login" element={<LoginForm setToken={setToken} />} />
         

@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import delete1 from "../utils/images/delete.png";
 import add from "../utils/images/add.png";
 import tonggle from "../utils/images/tonggle.png";
+import done from "../utils/images/check.png";
 
 const TaskList = ({ token }) => {
   const [tasks, setTasks] = useState([]);
@@ -86,6 +87,33 @@ const TaskList = ({ token }) => {
     }
   };
 
+  const handlecomplete = async (id, currentStatus) => {
+    const newStatus = currentStatus === "To Do" ? "Done" : "Done";
+
+    try {
+      const response = await fetch(`${backendapi}/tasks/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ status: newStatus }), // Only updating the status
+      });
+
+      if (response.ok) {
+        // Update the task in the state by mapping through the tasks
+        setTasks(
+          tasks.map((task) =>
+            task.id === id ? { ...task, status: newStatus } : task
+          )
+        );
+      } else {
+        alert("Failed to update status");
+      }
+    } catch (err) {
+      alert("Failed to update status");
+    }
+  };
   if (loading) {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 bg-gray-800 z-50">
@@ -95,7 +123,6 @@ const TaskList = ({ token }) => {
         </div>
       </div>
     );
-    
   }
 
   if (error) {
@@ -104,7 +131,7 @@ const TaskList = ({ token }) => {
 
   return (
     <div className="flex flex-col items-center">
-      <h2 className="text-xl font-semibold mb-4">Your Tasks</h2>
+      <h2 className="text-xl text-red-800 font-bold mb-4">Your Tasks</h2>
       <Link
         to="/add"
         className="bg-blue-500 text-white p-2 rounded mb-4 inline-block"
@@ -120,42 +147,57 @@ const TaskList = ({ token }) => {
       {tasks.length === 0 ? (
         <p>No tasks available</p>
       ) : (
-        <ul className="space-y-4 b">
+        <ul className="flex flex-wrap  lg:ml-auto lg:mr-auto justify-center lg:justify-start lg:w-5/6">
           {tasks.map((task) => (
-            <li key={task.id} className="bg-white p-4 shadow-lg rounded-lg">
+            <li
+              key={task.id}
+              className={`font-semibold  p-4  mx-2 my-2  shadow-lg rounded-lg ${
+                task.status === "In Progress"
+                  ? "bg-yellow-100"
+                  : task.status === "To Do"
+                  ? "bg-red-100"
+                  : task.status === "Done"
+                  ? "bg-green-200 text-black-400 "
+                  : "text-gray-500 bg-white"
+              }`}
+              // className="bg-white p-4  mx-2 my-2  shadow-lg rounded-lg"
+            >
               {" "}
               {/* Use task.id instead of task._id */}
               <h3 className="text-lg font-bold">{task.title}</h3>
               <p>{task.description}</p>
               <p
-          className={`font-semibold ${
-            task.status === 'In Progress'
-              ? 'text-yellow-500'
-              : task.status === 'To Do'
-              ? 'text-red-500'
-              : task.status === 'Done'
-              ? 'text-green-500'
-              : 'text-gray-500' // Default color if the status is unknown
-          }`}
-        >
-          Status: {task.status}
-        </p>
-              <div className="mt-2">
+                className={`font-semibold ${
+                  task.status === "In Progress"
+                    ? "text-yellow-600"
+                    : task.status === "To Do"
+                    ? "text-red-500"
+                    : task.status === "Done"
+                    ? "text-green-700 font-bold"
+                    : "text-gray-500"
+                }`}
+              >
+                Status: {task.status}
+              </p>
+              <div className="mt-2 flex">
                 <button
-                  onClick={() => handleUpdateStatus(task.id, task.status)} // Toggle status by task.id
+                  onClick={() => handleUpdateStatus(task.id, task.status)}
                   className="bg-yellow-500 text-white p-2 rounded mr-2"
                 >
                   <div className="flex items-center">
-                    <div className="mr-1">Tonggle</div>
                     <div>
                       <img
-                        className="w-4 h-4"
+                        className="w-4 h-4 mx-1"
                         src={tonggle}
-                        alt="Add new item"
+                        alt="tonggle"
                       />
                     </div>
+
+                    <div className="mr-1">Tonggle</div>
                   </div>
                 </button>
+
+                {/* DELETE button */}
                 <button
                   onClick={() => handleDelete(task.id)} // Use task.id for delete action
                   className="bg-red-500 text-white p-2 rounded"
@@ -170,10 +212,37 @@ const TaskList = ({ token }) => {
                     <div className="text-white mr-2">Delete</div>
                   </div>
                 </button>
+
+                {/* Done button */}
+
+                <button
+                  onClick={() => handlecomplete(task.id, task.status)}
+                  className=""
+                >
+                  <div className="flex  mx-2  items-center">
+                    <div className="mr-1">
+                      <img className="w-8 h-8 " src={done} alt="Done" />
+                    </div>
+                    <div className="text-green-500 "></div>
+                  </div>
+                </button>
               </div>
-              <p className=" font-semibold font-serif text-green-800 my-2">
-                Created At: {new Date(task.created_at).toLocaleString()}
-              </p>
+              <p className="font-semibold font-serif text-green-800 my-2">
+  Created : {new Date(task.created_at)
+    .toLocaleString('en-GB', {
+      timeZone: 'Asia/Kolkata', // Ensures Indian Standard Time (IST)
+      day: '2-digit',
+      month: 'short',
+      year: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      hour12: false,
+    })
+    .replace(',', ' - ')
+    .replace(' ', '.')}
+</p>
+
+
             </li>
           ))}
         </ul>
