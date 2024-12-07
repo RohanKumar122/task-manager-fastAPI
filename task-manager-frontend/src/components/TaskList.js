@@ -24,7 +24,7 @@ const TaskList = ({ token }) => {
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch tasks");
+          throw new Error("Failed to fetch tasks!! Please login again.");
         }
 
         const data = await response.json();
@@ -32,7 +32,7 @@ const TaskList = ({ token }) => {
         setTasks(data);
       } catch (err) {
         console.error("Error fetching tasks:", err); // Log the error for better debugging
-        setError("Failed to fetch tasks");
+        setError("Failed to fetch tasks!! Please login again.");
       } finally {
         setLoading(false);
       }
