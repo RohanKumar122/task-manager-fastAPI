@@ -139,8 +139,8 @@ const TaskList = ({ token }) => {
   }
 
   return (
-    <div className="flex flex-col items-center">
-      <h2 className="text-xl text-red-800 font-bold mb-4">Your Tasks</h2>
+    <div className="flex flex-col rounded-xl my-2 items-center">
+      <h2 className="text-xl text-red-800 font-bold my-2 mb-4">Your Tasks</h2>
 
       <div className="flex flex-row   justify-between w-3/7  h-full mx-auto">
 
@@ -194,7 +194,7 @@ const TaskList = ({ token }) => {
               {" "}
               {/* Use task.id instead of task._id */}
               <h3 className="text-lg font-bold">{task.title}</h3>
-              <p>{task.description}</p>
+              <p className="text-gray-600 my-2">{task.description}</p>
               <p
                 className={`font-semibold ${
                   task.status === "In Progress"
@@ -256,8 +256,30 @@ const TaskList = ({ token }) => {
                   </div>
                 </button>
               </div>
-              <p className="font-semibold font-serif text-green-800 my-2">
-                Created :{" "}
+ 
+
+              <p className=" font-semibold f text-red-800 my-2">
+                Due :{" "}
+                {new Date(task.due_date)
+                  .toLocaleString("en-GB", {
+                    timeZone: "Asia/Kolkata", // Ensures Indian Standard Time (IST)
+                    day: "2-digit",
+                    month: "short",
+                    year: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
+                  .replace(",", " , ")
+                  .replace(" ", ".")
+                  .replace(" ", ".")
+                  
+                  }
+              </p>
+
+
+              <p className="font-thin text-gray-500   my-2">
+                Created  :{" "}
                 {new Date(task.created_at)
                   .toLocaleString("en-GB", {
                     timeZone: "Asia/Kolkata", // Ensures Indian Standard Time (IST)
@@ -268,8 +290,11 @@ const TaskList = ({ token }) => {
                     minute: "2-digit",
                     hour12: false,
                   })
-                  .replace(",", " - ")
-                  .replace(" ", ".")}
+                  .replace(",", " , ")
+                  .replace(" ", ".")
+                  .replace(" ", ".")
+                  
+                  }
               </p>
             </li>
           ))}

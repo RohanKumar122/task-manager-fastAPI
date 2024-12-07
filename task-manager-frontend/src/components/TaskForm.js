@@ -7,7 +7,7 @@ const TaskForm = ({ token }) => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [status, setStatus] = useState('To Do');
-  const [dueDate, setDueDate] = useState('');
+  const [due_date, setDueDate] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -20,7 +20,7 @@ const TaskForm = ({ token }) => {
       title,
       description,
       status,
-      dueDate,
+      due_date,
     };
 
     setLoading(true);
@@ -106,10 +106,10 @@ const TaskForm = ({ token }) => {
             Due Date
           </label>
           <input
-            id="dueDate"
-            type="date"
+            id="due_date"
+            type="datetime-local"
             placeholder='yyyy-mm-dd'
-            value={dueDate}
+            value={due_date}
             onChange={(e) => setDueDate(e.target.value)}
             className="mt-1 block w-full px-4 py-2 border rounded-md shadow-sm"
             required

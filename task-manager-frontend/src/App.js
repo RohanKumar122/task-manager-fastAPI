@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import TaskList from './components/TaskList';
 import TaskForm from './components/TaskForm';
 import LoginForm from './components/LoginForm';
+import Header from './components/Header';
 
 const App = () => {
   const [token, setToken] = useState(localStorage.getItem('token') || null);
@@ -29,9 +30,8 @@ const App = () => {
   return (
     <Router>
       <div className="min-h-screen bg-gray-100  ">
-        <header className="bg-blue-500 text-white p-4">
-          <h1 className="text-xl">Task Manager</h1>
-        </header>
+        
+        <Header/>
 
         <main className="p-4 ">
           <Routes>
