@@ -9,6 +9,7 @@ const TaskList = ({ token }) => {
   const [tasks, setTasks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [filter, setFilter] = useState("ALL"); // State for dropdown filter
 
   const backendapi = process.env.REACT_APP_BACKEND_API;
   useEffect(() => {
@@ -114,6 +115,14 @@ const TaskList = ({ token }) => {
       alert("Failed to update status");
     }
   };
+
+  const handleFilterChange = (e) => {
+    setFilter(e.target.value); // Update filter state based on dropdown selection
+  };
+
+  const filteredTasks =
+    filter === "ALL" ? tasks : tasks.filter((task) => task.status === filter);
+
   if (loading) {
     return (
       <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-opacity-50 bg-gray-800 z-50">
@@ -132,23 +141,43 @@ const TaskList = ({ token }) => {
   return (
     <div className="flex flex-col items-center">
       <h2 className="text-xl text-red-800 font-bold mb-4">Your Tasks</h2>
-      <Link
-        to="/add"
-        className="bg-blue-500 text-white p-2 rounded mb-4 inline-block"
-      >
-        <div className="flex items-center">
-          <div className="mr-1">Add New</div>
-          <div>
-            <img className="w-6 h-6" src={add} alt="Add new item" />
-          </div>
-        </div>
-      </Link>
 
-      {tasks.length === 0 ? (
+      <div className="flex flex-row   justify-between w-3/7  h-full mx-auto">
+
+      <div className="flex justify-end mx-8 ">
+          <Link
+            to="/add"
+            className="bg-blue-500 text-white p-2 rounded mb-4 inline-block"
+          >
+            <div className="flex items-center">
+              <div className="mr-1">Add New</div>
+              <div>
+                <img className="w-6 h-6" src={add} alt="Add new item" />
+              </div>
+            </div>
+          </Link>
+        </div>
+
+          <select
+            value={filter}
+            onChange={handleFilterChange}
+            className="mb-4 flex flex-row justify-end p-2 border rounded border-gray-500 bg-gray-50"
+          >
+            <option value="ALL">All</option>
+            <option value="To Do">To Do</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Done">Done</option>
+            </select>
+    
+
+
+      </div>
+
+      {filteredTasks.length === 0 ? (
         <p>No tasks available</p>
       ) : (
         <ul className="flex flex-wrap  lg:ml-auto lg:mr-auto justify-center lg:justify-start lg:w-5/6">
-          {tasks.map((task) => (
+          {filteredTasks.map((task) => (
             <li
               key={task.id}
               className={`font-semibold  p-4  mx-2 my-2  shadow-lg rounded-lg ${
@@ -228,21 +257,20 @@ const TaskList = ({ token }) => {
                 </button>
               </div>
               <p className="font-semibold font-serif text-green-800 my-2">
-  Created : {new Date(task.created_at)
-    .toLocaleString('en-GB', {
-      timeZone: 'Asia/Kolkata', // Ensures Indian Standard Time (IST)
-      day: '2-digit',
-      month: 'short',
-      year: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: false,
-    })
-    .replace(',', ' - ')
-    .replace(' ', '.')}
-</p>
-
-
+                Created :{" "}
+                {new Date(task.created_at)
+                  .toLocaleString("en-GB", {
+                    timeZone: "Asia/Kolkata", // Ensures Indian Standard Time (IST)
+                    day: "2-digit",
+                    month: "short",
+                    year: "2-digit",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                    hour12: false,
+                  })
+                  .replace(",", " - ")
+                  .replace(" ", ".")}
+              </p>
             </li>
           ))}
         </ul>
